@@ -1,0 +1,1 @@
+export const UPDATE_STATE = "EMPLOYEE/UPDATE_STATE";
