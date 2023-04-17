@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import Root from "./root";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 import {
     applyMiddleware,
@@ -13,14 +14,7 @@ import { rootReducer } from "./redux/reducers/rootReducer";
 import thunk from "redux-thunk";
 
 // middleware -> oraliq narsa
-const store = createStore(
-    rootReducer,
-    compose(
-        applyMiddleware(thunk),
-        window.__REDUX_DEVTOOLS_EXTENSION__ &&
-            window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
-);
+const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>

@@ -5,6 +5,8 @@ const initialState = {
     employees: [],
     deleteModal: false,
     selectedIndex: "",
+    selectedItem: {},
+    loading: true,
 };
 
 export const employeeReducer = (state = initialState, action) => {

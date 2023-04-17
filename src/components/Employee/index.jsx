@@ -8,71 +8,92 @@ import {
     getEmployee,
     deleteEmployee,
 } from "../../redux/actions/employeeAction";
+import { FadeLoader } from "react-spinners";
 
 const Employee = (props) => {
     React.useEffect(() => {
         props.getEmployee();
-    }, [props.employee]);
+        props.updateState({ loading: false });
+    }, []);
     return (
         <>
-            <div className='container'>
-                <div className='row'>
-                    <div className='col-12 my-5'>
-                        <button
-                            className='btn btn-primary ms-auto d-block'
-                            type='button'
-                            onClick={() => props.updateState({ open: true })}>
-                            Add
-                        </button>
-                    </div>
-                    {props.employees.length > 0 &&
-                        props.employees.map((employee) => (
-                            <div className='col-4 mb-3' key={employee.id}>
-                                <div className='card'>
-                                    <div className='card-header'>
-                                        <h3 className='text-center'>
-                                            {employee.first_name +
-                                                " " +
-                                                employee.last_name}
-                                        </h3>
-                                    </div>
-                                    <div className='card-body'>
-                                        <p className='mb-2'>
-                                            Age: {employee.age}
-                                        </p>
-                                        <p className='mb-2'>
-                                            Salary:{" "}
-                                            {employee.salary
-                                                ? "$" + employee.salary
-                                                : "$0"}
-                                        </p>
-                                        <p className='mb-2'>
-                                            Position: {employee.position}
-                                        </p>
-                                    </div>
-                                    <div className='card-footer d-flex justify-content-between'>
-                                        <button
-                                            className='btn btn-primary'
-                                            type='button'>
-                                            Edit
-                                        </button>
-                                        <button
-                                            className='btn btn-danger'
-                                            type='button'
-                                            onClick={() =>
-                                                props.updateState({
-                                                    deleteModal: true,
-                                                    selectedIndex: employee.id,
-                                                })
-                                            }>
-                                            Delete
-                                        </button>
+            {props.loading ? (
+                <FadeLoader
+                    color={"#00ff00"}
+                    loading={props.loading}
+                    size={150}
+                    aria-label='Loading Spinner'
+                    data-testid='loader'
+                />
+            ) : (
+                <div className='container'>
+                    <div className='row'>
+                        <div className='col-12 my-5'>
+                            <button
+                                className='btn btn-primary ms-auto d-block'
+                                type='button'
+                                onClick={() =>
+                                    props.updateState({ open: true })
+                                }>
+                                Add
+                            </button>
+                        </div>
+                        {props.employees.length > 0 &&
+                            props.employees.map((employee) => (
+                                <div className='col-4 mb-3' key={employee.id}>
+                                    <div className='card'>
+                                        <div className='card-header'>
+                                            <h3 className='text-center'>
+                                                {employee.first_name +
+                                                    " " +
+                                                    employee.last_name}
+                                            </h3>
+                                        </div>
+                                        <div className='card-body'>
+                                            <p className='mb-2'>
+                                                Age: {employee.age}
+                                            </p>
+                                            <p className='mb-2'>
+                                                Salary:{" "}
+                                                {employee.salary
+                                                    ? "$" + employee.salary
+                                                    : "$0"}
+                                            </p>
+                                            <p className='mb-2'>
+                                                Position: {employee.position}
+                                            </p>
+                                        </div>
+                                        <div className='card-footer d-flex justify-content-between'>
+                                            <button
+                                                className='btn btn-primary'
+                                                type='button'
+                                                onClick={() =>
+                                                    props.updateState({
+                                                        open: true,
+                                                        selectedItem: employee,
+                                                    })
+                                                }>
+                                                Edit
+                                            </button>
+                                            <button
+                                                className='btn btn-danger'
+                                                type='button'
+                                                onClick={() =>
+                                                    props.updateState({
+                                                        deleteModal: true,
+                                                        selectedIndex:
+                                                            employee.id,
+                                                    })
+                                                }>
+                                                Delete
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                    </div>
                 </div>
-            </div>
+            )}
 
             <Modal
                 isOpen={props.open}
@@ -192,6 +213,8 @@ const mapStateToProps = (state) => {
         employees: state.employee.employees,
         deleteModal: state.employee.deleteModal,
         selectedIndex: state.employee.selectedIndex,
+        selectedItem: state.employee.selectedItem,
+        loading: state.employee.loading,
     };
 };
 
